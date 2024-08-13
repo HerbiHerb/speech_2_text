@@ -3,10 +3,14 @@ import pyaudio
 import asyncio
 import websockets
 import json
+import time
+import requests
 import shutil
 import regex
 import pathlib
 import pygame
+import yaml
+import redis
 from dotenv import load_dotenv
 
 # Deepgram ALternative zu Picovoice
@@ -17,13 +21,7 @@ from dotenv import load_dotenv
 # Microphone test on raspi
 # https://www.circuitbasics.com/how-to-record-audio-with-the-raspberry-pi/
 
-LISTENING_SOUND_PATH = "./data/listening_sound.wav"
-
-# Database connection setup
-DESIRED_ROOT = pathlib.Path(__file__).parent
-SQLALCHEMY_DATABASE_URI = f"sqlite:///{DESIRED_ROOT}/instance/database.db"
-SQLALCHEMY_ENGINE_OPTIONS = {"pool_recycle": 299}
-SQLALCHEMY_TRACK_MODIFICATIONS = False
+LISTENING_SOUND_PATH = "src\data\listening_sound.wav"
 FORMAT = pyaudio.paInt16
 CHANNELS = 1
 RATE = 16000
@@ -141,9 +139,9 @@ async def run(key, silence_interval):
                         endpoint_reached = True
 
                 if endpoint_reached:
-                    print(f"Final: {transcript}")
                     if wake_word_occured:
-                        print("Wake word occured")
+                        print(transcript)
+
                         # with Session.begin() as session:
                         #     query = UserQuery(user_query=transcript)
                         #     session.add(query)
@@ -167,4 +165,27 @@ async def run(key, silence_interval):
 
 if __name__ == "__main__":
     load_dotenv()
+    with open(
+        "config/config.yaml",
+        "r",
+    ) as file:
+        config = yaml.safe_load(file)
+        os.environ["HOST_URL"] = config["host_url"]
+        os.environ["CHAT_UI_URL"] = config["chat_ui_url"]
+
+    # redis_client = redis.StrictRedis(host="localhost", port=6379, db=0)
+
+    # # Beispiel für das Abrufen der user_id
+    # user_id_key = "user_id"  # Der Schlüssel sollte in einer realen Anwendung dynamisch generiert werden
+    # user_id = redis_client.get(user_id_key)
+    # user_id = json.loads(user_id)
+    # conv_data = requests.post(
+    #     url=os.environ["HOST_URL"] + "/add_new_speech_query",
+    #     data=json.dumps(
+    #         {
+    #             "speech_query": "Kannst du mir sagen wann das System 1 im Entscheidungsprozess involviert ist. Basierend auf dem Buch 'Schnelles Denken langsames Denken'.",
+    #             "user_id": user_id,
+    #         }
+    #     ),
+    # )
     asyncio.get_event_loop().run_until_complete(run(os.getenv("DEEPGRAM_API_KEY"), 5))
