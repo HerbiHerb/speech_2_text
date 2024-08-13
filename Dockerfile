@@ -21,8 +21,8 @@ RUN apt-get update && apt-get install -y \
     libx11-6 \
     && rm -rf /var/lib/apt/lists/*
 
-RUN pip install pyaudio
-RUN pip install pygame==2.0.0
+# RUN pip install pyaudio
+# RUN pip install pygame==2.0.0
 #RUN python pyaudio/setup.py install
 # Erstelle Arbeitsverzeichnis
 WORKDIR /usr/src/app
