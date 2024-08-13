@@ -17,6 +17,6 @@ WORKDIR /usr/src/app
 COPY . .
 # Installiere Python-Abhängigkeiten
 RUN pip install --no-cache-dir --progress-bar off -r requirements.txt 
-RUN apt get install python3-pygame
+
 # Setze den Container-Einstiegspunkt
 CMD ["python", "./src/speech_2_text/main.py"]
