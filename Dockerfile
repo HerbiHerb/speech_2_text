@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y \
     ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 RUN pip install pyaudio
+RUN pip install pygame
 #RUN python pyaudio/setup.py install
 # Erstelle Arbeitsverzeichnis
 WORKDIR /usr/src/app
