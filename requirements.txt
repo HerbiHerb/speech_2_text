@@ -1,5 +1,5 @@
 aiohttp==3.8.6
-PyAudio==0.2.14
+#PyAudio==0.2.14
 pydantic==2.5.0
 pydantic_core==2.14.1
 #pygame==2.5.2
