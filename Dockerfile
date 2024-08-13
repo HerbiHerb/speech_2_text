@@ -9,8 +9,8 @@ RUN apt-get update && apt-get install -y \
     libportaudiocpp0 \
     ffmpeg \
     && rm -rf /var/lib/apt/lists/*
-RUN apt-get python-dev
-RUN python pyaudio/setup.py install
+RUN pip install pyaudio
+#RUN python pyaudio/setup.py install
 # Erstelle Arbeitsverzeichnis
 WORKDIR /usr/src/app
 # Kopiere Python-Skript in das Arbeitsverzeichnis
