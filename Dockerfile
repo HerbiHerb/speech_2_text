@@ -10,14 +10,11 @@ RUN apt-get update && apt-get install -y \
     ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 
-# Installiere Python-Abhängigkeiten
-RUN pip install --no-cache-dir --progress-bar off -r requirements.txt 
-
 # Erstelle Arbeitsverzeichnis
 WORKDIR /usr/src/app
-
 # Kopiere Python-Skript in das Arbeitsverzeichnis
 COPY . .
-
+# Installiere Python-Abhängigkeiten
+RUN pip install --no-cache-dir --progress-bar off -r requirements.txt 
 # Setze den Container-Einstiegspunkt
 CMD ["python", "./src/speech_2_text/main.py"]
