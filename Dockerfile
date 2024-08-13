@@ -1,5 +1,5 @@
 # Basis-Image, das auf dem Raspberry Pi läuft (ARM-Architektur beachten)
-FROM python:3.9-slim-buster
+FROM python:3.9
 
 # Installiere System-Abhängigkeiten für Audio und Python-Pakete
 RUN apt-get update && apt-get install -y \
