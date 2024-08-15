@@ -21,6 +21,8 @@ from dotenv import load_dotenv
 # Microphone test on raspi
 # https://www.circuitbasics.com/how-to-record-audio-with-the-raspberry-pi/
 
+redis_client = redis.StrictRedis(host="localhost", port=6379, db=0)
+
 LISTENING_SOUND_PATH = "src\data\listening_sound.wav"
 FORMAT = pyaudio.paInt16
 CHANNELS = 1
@@ -173,12 +175,18 @@ if __name__ == "__main__":
         os.environ["HOST_URL"] = config["host_url"]
         os.environ["CHAT_UI_URL"] = config["chat_ui_url"]
 
-    # redis_client = redis.StrictRedis(host="localhost", port=6379, db=0)
-
     # # Beispiel für das Abrufen der user_id
-    # user_id_key = "user_id"  # Der Schlüssel sollte in einer realen Anwendung dynamisch generiert werden
-    # user_id = redis_client.get(user_id_key)
-    # user_id = json.loads(user_id)
+    user_id_key = "user_id"  # Der Schlüssel sollte in einer realen Anwendung dynamisch generiert werden
+    try:
+        user_id = redis_client.get(user_id_key)
+        user_id = json.loads(user_id)
+    except Exception as e:
+        print(e)
+        if os.path.isfile("..../rag_chat_ui/src/chat_ui/static/tmp/tmp_user_file.json"):
+            with open() as f:
+                json_data = json.load(f)
+                user_id = json_data["user_id"]
+
     # conv_data = requests.post(
     #     url=os.environ["HOST_URL"] + "/add_new_speech_query",
     #     data=json.dumps(
