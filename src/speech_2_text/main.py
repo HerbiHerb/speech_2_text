@@ -46,6 +46,22 @@ def check_wake_word_occurance(wake_word: str, text: str):
         return False
 
 
+def get_the_user_id_():
+    # # Beispiel für das Abrufen der user_id
+    user_id_key = "user_id"  # Der Schlüssel sollte in einer realen Anwendung dynamisch generiert werden
+    user_id = None
+    try:
+        user_id = redis_client.get(user_id_key)
+        user_id = json.loads(user_id)
+    except Exception as e:
+        print(e)
+        if os.path.isfile("..../rag_chat_ui/src/chat_ui/static/tmp/tmp_user_file.json"):
+            with open() as f:
+                json_data = json.load(f)
+                user_id = json_data["user_id"]
+    return user_id
+
+
 async def run(key, silence_interval):
     async with websockets.connect(
         "wss://api.deepgram.com/v1/listen?endpointing=true&interim_results=true&encoding=linear16&sample_rate=16000&channels=1",
@@ -143,11 +159,16 @@ async def run(key, silence_interval):
                 if endpoint_reached:
                     if wake_word_occured:
                         print(transcript)
-
-                        # with Session.begin() as session:
-                        #     query = UserQuery(user_query=transcript)
-                        #     session.add(query)
-                        # session.commit()
+                        user_id = get_the_user_id_()
+                        conv_data = requests.post(
+                            url=os.environ["HOST_URL"] + "/add_new_speech_query",
+                            data=json.dumps(
+                                {
+                                    "speech_query": transcript,
+                                    "user_id": user_id,
+                                }
+                            ),
+                        )
                     endpoint_reached = False
                     wake_word_occured = False
                     listening_sound_played = False
