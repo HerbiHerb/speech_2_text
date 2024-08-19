@@ -25,9 +25,9 @@ redis_client = redis.StrictRedis(host="localhost", port=6379, db=0)
 
 # LISTENING_SOUND_PATH = "src\data\listening_sound.wav"
 FORMAT = pyaudio.paInt16
-# CHANNELS = 1
-# RATE = 16000
-# CHUNK = 8000
+CHANNELS = 1
+RATE = 16000
+CHUNK = 8000
 
 # terminal_size = shutil.get_terminal_size()
 audio_queue = asyncio.Queue()
@@ -70,10 +70,10 @@ async def run(key, silence_interval):
             audio = pyaudio.PyAudio()
             stream = audio.open(
                 format=FORMAT,
-                channels=os.getenv("CHANNELS"),
-                rate=os.getenv("RATE"),
+                channels=CHANNELS,
+                rate=RATE,
                 input=True,
-                frames_per_buffer=os.getenv("CHUNK"),
+                frames_per_buffer=CHUNK,
                 stream_callback=callback,
             )
 
