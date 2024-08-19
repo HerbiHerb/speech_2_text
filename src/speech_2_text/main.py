@@ -23,13 +23,13 @@ from dotenv import load_dotenv
 
 redis_client = redis.StrictRedis(host="localhost", port=6379, db=0)
 
-LISTENING_SOUND_PATH = "src\data\listening_sound.wav"
+# LISTENING_SOUND_PATH = "src\data\listening_sound.wav"
 FORMAT = pyaudio.paInt16
-CHANNELS = 1
-RATE = 16000
-CHUNK = 8000
+# CHANNELS = 1
+# RATE = 16000
+# CHUNK = 8000
 
-terminal_size = shutil.get_terminal_size()
+# terminal_size = shutil.get_terminal_size()
 audio_queue = asyncio.Queue()
 
 
@@ -47,11 +47,9 @@ def check_wake_word_occurance(wake_word: str, text: str):
 
 
 def get_the_user_id_():
-    # # Beispiel für das Abrufen der user_id
-    user_id_key = "user_id"  # Der Schlüssel sollte in einer realen Anwendung dynamisch generiert werden
     user_id = None
     try:
-        user_id = redis_client.get(user_id_key)
+        user_id = redis_client.get("user_id")
         user_id = json.loads(user_id)
     except Exception as e:
         print(e)
@@ -72,10 +70,10 @@ async def run(key, silence_interval):
             audio = pyaudio.PyAudio()
             stream = audio.open(
                 format=FORMAT,
-                channels=CHANNELS,
-                rate=RATE,
+                channels=os.getenv("CHANNELS"),
+                rate=os.getenv("RATE"),
                 input=True,
-                frames_per_buffer=CHUNK,
+                frames_per_buffer=os.getenv("CHUNK"),
                 stream_callback=callback,
             )
 
@@ -124,7 +122,7 @@ async def run(key, silence_interval):
                             print("Wake word detected")
                             pygame.init()
                             pygame.mixer.init()
-                            pygame.mixer.music.load(LISTENING_SOUND_PATH)
+                            pygame.mixer.music.load(os.getenv("LISTENING_SOUND_PATH"))
                             pygame.mixer.music.play()
                             while pygame.mixer.music.get_busy():
                                 pygame.event.pump()
@@ -195,26 +193,4 @@ if __name__ == "__main__":
         config = yaml.safe_load(file)
         os.environ["HOST_URL"] = config["host_url"]
         os.environ["CHAT_UI_URL"] = config["chat_ui_url"]
-
-    # # Beispiel für das Abrufen der user_id
-    user_id_key = "user_id"  # Der Schlüssel sollte in einer realen Anwendung dynamisch generiert werden
-    try:
-        user_id = redis_client.get(user_id_key)
-        user_id = json.loads(user_id)
-    except Exception as e:
-        print(e)
-        if os.path.isfile("..../rag_chat_ui/src/chat_ui/static/tmp/tmp_user_file.json"):
-            with open() as f:
-                json_data = json.load(f)
-                user_id = json_data["user_id"]
-
-    # conv_data = requests.post(
-    #     url=os.environ["HOST_URL"] + "/add_new_speech_query",
-    #     data=json.dumps(
-    #         {
-    #             "speech_query": "Kannst du mir sagen wann das System 1 im Entscheidungsprozess involviert ist. Basierend auf dem Buch 'Schnelles Denken langsames Denken'.",
-    #             "user_id": user_id,
-    #         }
-    #     ),
-    # )
     asyncio.get_event_loop().run_until_complete(run(os.getenv("DEEPGRAM_API_KEY"), 5))
