@@ -120,6 +120,7 @@ async def run(key, silence_interval):
                             "jarvis stop", transcript
                         )
                         if stop_word_occured:
+                            print("Stopword occured")
                             stop_response = requests.get(
                                 url=os.environ["CHAT_UI_URL"] + "/stop_speaking"
                             )
@@ -200,6 +201,4 @@ if __name__ == "__main__":
         os.environ["HOST_URL"] = config["host_url"]
         os.environ["CHAT_UI_URL"] = config["chat_ui_url"]
 
-    conv_data = requests.get(url=os.environ["CHAT_UI_URL"] + "/start_test_speaking")
-    # conv_data = requests.get(url=os.environ["CHAT_UI_URL"] + "/stop_speaking")
-    # asyncio.get_event_loop().run_until_complete(run(os.getenv("DEEPGRAM_API_KEY"), 5))
+    asyncio.get_event_loop().run_until_complete(run(os.getenv("DEEPGRAM_API_KEY"), 5))
