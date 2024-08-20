@@ -38,7 +38,7 @@ def callback(input_data, frame_count, time_info, status_flag):
     return (input_data, pyaudio.paContinue)
 
 
-def check_wake_word_occurance(wake_word: str, text: str):
+def check_word_occurance(wake_word: str, text: str):
     matches = regex.findall("(" + wake_word + "){e<=2}", text)
     if len(matches) > 0:
         return True
@@ -113,10 +113,16 @@ async def run(key, silence_interval):
                         transcript += message["channel"]["alternatives"][0][
                             "transcript"
                         ]
-                        # print(f"Final: {transcript}")
-                        wake_word_occured = check_wake_word_occurance(
+                        wake_word_occured = check_word_occurance(
                             "hey jarvis", transcript
                         )
+                        stop_word_occured = check_word_occurance(
+                            "jarvis stop", transcript
+                        )
+                        if stop_word_occured:
+                            stop_response = requests.get(
+                                url=os.environ["CHAT_UI_URL"] + "/stop_speaking"
+                            )
                         if wake_word_occured and not listening_sound_played:
                             listening_sound_played = True
                             print("Wake word detected")
@@ -193,4 +199,7 @@ if __name__ == "__main__":
         config = yaml.safe_load(file)
         os.environ["HOST_URL"] = config["host_url"]
         os.environ["CHAT_UI_URL"] = config["chat_ui_url"]
-    asyncio.get_event_loop().run_until_complete(run(os.getenv("DEEPGRAM_API_KEY"), 5))
+
+    conv_data = requests.get(url=os.environ["CHAT_UI_URL"] + "/start_test_speaking")
+    # conv_data = requests.get(url=os.environ["CHAT_UI_URL"] + "/stop_speaking")
+    # asyncio.get_event_loop().run_until_complete(run(os.getenv("DEEPGRAM_API_KEY"), 5))
