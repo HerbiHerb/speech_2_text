@@ -13,17 +13,8 @@ import yaml
 import redis
 from dotenv import load_dotenv
 
-# Deepgram ALternative zu Picovoice
-# https://www.youtube.com/watch?v=dq4AiiiaAsY
-# https://www.raspberrypi.com/news/raspberry-pi-wearable-subtitles/
-# https://deepgram.com/learn/building-a-conversational-ai-flow-with-deepgram
-
-# Microphone test on raspi
-# https://www.circuitbasics.com/how-to-record-audio-with-the-raspberry-pi/
-
 redis_client = redis.StrictRedis(host="localhost", port=6379, db=0)
 
-# LISTENING_SOUND_PATH = "src\data\listening_sound.wav"
 FORMAT = pyaudio.paInt16
 CHANNELS = 1
 RATE = 16000
