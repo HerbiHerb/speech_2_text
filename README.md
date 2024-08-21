@@ -32,7 +32,7 @@
 
 This project is a Speech-to-Text API implementation using Python. It leverages the Deepgram API for real-time speech recognition, allowing users to interact with a system via voice commands. The project includes functionality for detecting specific wake words and stopping the process based on specific voice commands. 
 
-This project is only one part of the bigger Home-Assitant-Project, which consists of the two other repositories [Rag-Assistant-API](https://github.com/HerbiHerb/rag_assistant_api) and [RAG-Chat-UI](https://github.com/HerbiHerb/rag_chat_ui). 
+This project is only one part of the bigger Home-Assitant-Project, which consists of the two other repositories [Rag-Assistant-API](https://github.com/HerbiHerb/rag_assistant_api), [RAG-Chat-UI](https://github.com/HerbiHerb/rag_chat_ui) and [Rag-Assistant-Start](https://github.com/HerbiHerb/rag_assistant_start). 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
