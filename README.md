@@ -92,9 +92,10 @@ To get a local copy up and running, follow these simple steps.
 
 ### Roadmap
 
-- [ ]  Add support for multiple languages
+- [ ] Add support for multiple languages
 - [ ] Improve wake word detection accuracy
 - [ ] Integrate with additional speech-to-text services for better accuracy
+- [ ] Add whisper real time transcription (https://github.com/ggerganov/whisper.cpp/blob/master/models/download-ggml-model.sh, https://github.com/AIWintermuteAI/WhisperLive?tab=readme-ov-file)
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Contributing
